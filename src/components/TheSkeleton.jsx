@@ -37,9 +37,12 @@ const TheSkeleton = () => {
 	const [showCelebration, setShowCelebration] = useState(false);
 
 	const handlePartClick = (id) => {
-		setSelected(id);
-		setInputValue(labels[id] || '');
-		setLastIncorrect(null);
+		// Only allow clicking if the part hasn't been correctly answered
+		if (feedback[id] !== true) {
+			setSelected(id);
+			setInputValue(labels[id] || '');
+			setLastIncorrect(null);
+		}
 	};
 
 	const handleInputChange = (e) => {
@@ -134,10 +137,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'skull' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => setHovered('skull')}
+					onMouseEnter={() => feedback['skull'] !== true && setHovered('skull')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('skull')}
-					style={{ cursor: 'pointer' }}
+					style={{ cursor: feedback['skull'] === true ? 'default' : 'pointer' }}
 				/>
 				{/* Clavicle */}
 				<rect
@@ -149,10 +152,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'clavicle' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => setHovered('clavicle')}
+					onMouseEnter={() => feedback['clavicle'] !== true && setHovered('clavicle')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('clavicle')}
-					style={{ cursor: 'pointer' }}
+					style={{ cursor: feedback['clavicle'] === true ? 'default' : 'pointer' }}
 				/>
 				{/* Humerus (left) */}
 				<rect
@@ -164,10 +167,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'humerus' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => setHovered('humerus')}
+					onMouseEnter={() => feedback['humerus'] !== true && setHovered('humerus')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('humerus')}
-					style={{ cursor: 'pointer' }}
+					style={{ cursor: feedback['humerus'] === true ? 'default' : 'pointer' }}
 				/>
 				{/* Ribs */}
 				<ellipse
@@ -179,10 +182,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'ribs' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => setHovered('ribs')}
+					onMouseEnter={() => feedback['ribs'] !== true && setHovered('ribs')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('ribs')}
-					style={{ cursor: 'pointer' }}
+					style={{ cursor: feedback['ribs'] === true ? 'default' : 'pointer' }}
 				/>
 				{/* Pelvis */}
 				<ellipse
@@ -194,10 +197,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'pelvis' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => setHovered('pelvis')}
+					onMouseEnter={() => feedback['pelvis'] !== true && setHovered('pelvis')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('pelvis')}
-					style={{ cursor: 'pointer' }}
+					style={{ cursor: feedback['pelvis'] === true ? 'default' : 'pointer' }}
 				/>
 				{/* Femur (left) */}
 				<rect
@@ -209,10 +212,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'femur' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => setHovered('femur')}
+					onMouseEnter={() => feedback['femur'] !== true && setHovered('femur')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('femur')}
-					style={{ cursor: 'pointer' }}
+					style={{ cursor: feedback['femur'] === true ? 'default' : 'pointer' }}
 				/>
 				{/* Tibia (left) */}
 				<rect
@@ -224,10 +227,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'tibia' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => setHovered('tibia')}
+					onMouseEnter={() => feedback['tibia'] !== true && setHovered('tibia')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('tibia')}
-					style={{ cursor: 'pointer' }}
+					style={{ cursor: feedback['tibia'] === true ? 'default' : 'pointer' }}
 				/>
 				{/* Callout lines and labels/inputs */}
 				{PARTS.map((part) => {
