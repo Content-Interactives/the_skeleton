@@ -1,126 +1,81 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const PARTS = [
-	// Skull at top center
-	{ id: 'skull', label: 'Skull', partX: 250, partY: 80, labelX: 400, labelY: 80 },
-	// Clavicle just below skull
-	{ id: 'clavicle', label: 'Clavicle', partX: 250, partY: 140, labelX: 400, labelY: 140 },
-	// Ribs below clavicle
-	{ id: 'ribs', label: 'Ribs', partX: 250, partY: 210, labelX: 400, labelY: 210 },
-	// Pelvis below ribs
-	{ id: 'pelvis', label: 'Pelvis', partX: 250, partY: 300, labelX: 400, labelY: 300 },
-	// Femur below pelvis
-	{ id: 'femur', label: 'Femur', partX: 250, partY: 380, labelX: 400, labelY: 380 },
-	// Tibia below femur
-	{ id: 'tibia', label: 'Tibia', partX: 250, partY: 460, labelX: 400, labelY: 460 },
-	// Humerus to the left of ribs/clavicle
-	{ id: 'humerus', label: 'Humerus', partX: 140, partY: 170, labelX: 60, labelY: 170 },
+	{ 
+		id: 'skull', 
+		label: 'Skull', 
+		partX: 250, 
+		partY: 80, 
+		labelX: 400, 
+		labelY: 80,
+		description: 'The skull is the bony structure that forms the head and protects the brain. It consists of 22 bones that are fused together in adults.'
+	},
+	{ 
+		id: 'clavicle', 
+		label: 'Clavicle', 
+		partX: 250, 
+		partY: 140, 
+		labelX: 400, 
+		labelY: 140,
+		description: 'The clavicle, or collarbone, is a long bone that connects the shoulder blade to the sternum. It helps support the shoulder and arm.'
+	},
+	{ 
+		id: 'ribs', 
+		label: 'Ribs', 
+		partX: 250, 
+		partY: 210, 
+		labelX: 400, 
+		labelY: 210,
+		description: 'The ribs are curved bones that form the rib cage, protecting vital organs like the heart and lungs. Humans typically have 12 pairs of ribs.'
+	},
+	{ 
+		id: 'pelvis', 
+		label: 'Pelvis', 
+		partX: 250, 
+		partY: 300, 
+		labelX: 400, 
+		labelY: 300,
+		description: 'The pelvis is a basin-shaped structure that connects the spine to the legs. It supports the weight of the upper body and protects reproductive organs.'
+	},
+	{ 
+		id: 'femur', 
+		label: 'Femur', 
+		partX: 250, 
+		partY: 380, 
+		labelX: 400, 
+		labelY: 380,
+		description: 'The femur, or thigh bone, is the longest and strongest bone in the human body. It connects the hip to the knee.'
+	},
+	{ 
+		id: 'tibia', 
+		label: 'Tibia', 
+		partX: 250, 
+		partY: 460, 
+		labelX: 400, 
+		labelY: 460,
+		description: 'The tibia, or shinbone, is the larger of the two bones in the lower leg. It bears most of the body\'s weight and forms the knee joint with the femur.'
+	},
+	{ 
+		id: 'humerus', 
+		label: 'Humerus', 
+		partX: 140, 
+		partY: 170, 
+		labelX: 60, 
+		labelY: 170,
+		description: 'The humerus is the long bone in the upper arm, connecting the shoulder to the elbow. It allows for arm movement and supports the forearm.'
+	},
 ];
-
-const correctAnswers = {
-	skull: 'Skull',
-	clavicle: 'Clavicle',
-	humerus: 'Humerus',
-	ribs: 'Ribs',
-	pelvis: 'Pelvis',
-	femur: 'Femur',
-	tibia: 'Tibia',
-};
 
 const TheSkeleton = () => {
 	const [hovered, setHovered] = useState(null);
 	const [selected, setSelected] = useState(null);
-	const [labels, setLabels] = useState({});
-	const [feedback, setFeedback] = useState({});
-	const [inputValue, setInputValue] = useState('');
-	const [lastIncorrect, setLastIncorrect] = useState(null);
-	const [showCelebration, setShowCelebration] = useState(false);
 
 	const handlePartClick = (id) => {
-		// Only allow clicking if the part hasn't been correctly answered
-		if (feedback[id] !== true) {
-			setSelected(id);
-			setInputValue(labels[id] || '');
-			setLastIncorrect(null);
-		}
-	};
-
-	const handleInputChange = (e) => {
-		setInputValue(e.target.value);
-	};
-
-	const handleInputSubmit = (e) => {
-		e.preventDefault();
-		const isCorrect = inputValue.trim().toLowerCase() === correctAnswers[selected].toLowerCase();
-		if (isCorrect) {
-			setLabels({ ...labels, [selected]: inputValue });
-			setFeedback((prev) => ({ ...prev, [selected]: true }));
-			setSelected(null);
-			setInputValue('');
-			setLastIncorrect(null);
-		} else {
-			setFeedback((prev) => ({ ...prev, [selected]: false }));
-			setLastIncorrect(selected);
-		}
-	};
-
-	// Progress calculation
-	const total = Object.keys(correctAnswers).length;
-	const correct = Object.values(feedback).filter(Boolean).length;
-	const progress = correct / total;
-
-	useEffect(() => {
-		if (correct === total && total > 0) {
-			setShowCelebration(true);
-			const timeout = setTimeout(() => setShowCelebration(false), 2500);
-			return () => clearTimeout(timeout);
-		}
-	}, [correct, total]);
-
-	const handleReset = () => {
-		setLabels({});
-		setFeedback({});
-		setSelected(null);
-		setInputValue('');
+		setSelected(selected === id ? null : id);
 	};
 
 	return (
 		<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-			{/* Progress Bar */}
-			<div style={{ width: 400, margin: '24px auto 8px auto', height: 18, background: '#eee', borderRadius: 9, overflow: 'hidden', border: '1px solid #ccc', position: 'relative' }}>
-				<div style={{ width: `${progress * 100}%`, height: '100%', background: '#8fd19e', transition: 'width 0.5s' }} />
-				<span style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#333', fontSize: 14 }}>
-					{correct} / {total} correct
-				</span>
-			</div>
-			{/* Celebration animation */}
-			{showCelebration && (
-				<div style={{
-					position: 'absolute',
-					top: 80,
-					left: 0,
-					width: '100%',
-					fontSize: 32,
-					color: '#4caf50',
-					fontWeight: 'bold',
-					textShadow: '0 2px 8px #fff',
-					animation: 'fadeInOut 2.5s',
-					pointerEvents: 'none',
-					zIndex: 10,
-					display: 'flex',
-					justifyContent: 'center',
-				}}>
-					🎉 Well done! 🎉
-					<style>{`
-						@keyframes fadeInOut {
-							0% { opacity: 0; }
-							10% { opacity: 1; }
-							90% { opacity: 1; }
-							100% { opacity: 0; }
-						}
-					`}</style>
-				</div>
-			)}
 			<svg
 				width="500"
 				height="500"
@@ -137,10 +92,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'skull' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => feedback['skull'] !== true && setHovered('skull')}
+					onMouseEnter={() => setHovered('skull')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('skull')}
-					style={{ cursor: feedback['skull'] === true ? 'default' : 'pointer' }}
+					style={{ cursor: 'pointer' }}
 				/>
 				{/* Clavicle */}
 				<rect
@@ -152,10 +107,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'clavicle' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => feedback['clavicle'] !== true && setHovered('clavicle')}
+					onMouseEnter={() => setHovered('clavicle')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('clavicle')}
-					style={{ cursor: feedback['clavicle'] === true ? 'default' : 'pointer' }}
+					style={{ cursor: 'pointer' }}
 				/>
 				{/* Humerus (left) */}
 				<rect
@@ -167,10 +122,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'humerus' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => feedback['humerus'] !== true && setHovered('humerus')}
+					onMouseEnter={() => setHovered('humerus')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('humerus')}
-					style={{ cursor: feedback['humerus'] === true ? 'default' : 'pointer' }}
+					style={{ cursor: 'pointer' }}
 				/>
 				{/* Ribs */}
 				<ellipse
@@ -182,10 +137,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'ribs' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => feedback['ribs'] !== true && setHovered('ribs')}
+					onMouseEnter={() => setHovered('ribs')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('ribs')}
-					style={{ cursor: feedback['ribs'] === true ? 'default' : 'pointer' }}
+					style={{ cursor: 'pointer' }}
 				/>
 				{/* Pelvis */}
 				<ellipse
@@ -197,10 +152,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'pelvis' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => feedback['pelvis'] !== true && setHovered('pelvis')}
+					onMouseEnter={() => setHovered('pelvis')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('pelvis')}
-					style={{ cursor: feedback['pelvis'] === true ? 'default' : 'pointer' }}
+					style={{ cursor: 'pointer' }}
 				/>
 				{/* Femur (left) */}
 				<rect
@@ -212,10 +167,10 @@ const TheSkeleton = () => {
 					fill={hovered === 'femur' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => feedback['femur'] !== true && setHovered('femur')}
+					onMouseEnter={() => setHovered('femur')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('femur')}
-					style={{ cursor: feedback['femur'] === true ? 'default' : 'pointer' }}
+					style={{ cursor: 'pointer' }}
 				/>
 				{/* Tibia (left) */}
 				<rect
@@ -227,106 +182,83 @@ const TheSkeleton = () => {
 					fill={hovered === 'tibia' ? '#ffe066' : '#fff'}
 					stroke="#333"
 					strokeWidth="2"
-					onMouseEnter={() => feedback['tibia'] !== true && setHovered('tibia')}
+					onMouseEnter={() => setHovered('tibia')}
 					onMouseLeave={() => setHovered(null)}
 					onClick={() => handlePartClick('tibia')}
-					style={{ cursor: feedback['tibia'] === true ? 'default' : 'pointer' }}
+					style={{ cursor: 'pointer' }}
 				/>
-				{/* Callout lines and labels/inputs */}
-				{PARTS.map((part) => {
-					const isSelected = selected === part.id;
-					const isCorrect = feedback[part.id] === true;
-					const isIncorrect = feedback[part.id] === false;
-					return (
-						<g key={part.id}>
-							<line
-								x1={part.partX}
-								y1={part.partY}
-								x2={part.labelX}
-								y2={part.labelY}
-								stroke="#1976d2"
-								strokeWidth={2}
-							/>
-							{/* Dot at the part end */}
-							<circle
-								cx={part.partX}
-								cy={part.partY}
-								r={4}
-								fill="#1976d2"
-							/>
-							{/* Label or input */}
-							{isSelected ? (
-								<foreignObject x={part.labelX + 8} y={part.labelY - 16} width={150} height={40}>
-									<form onSubmit={handleInputSubmit} style={{ display: 'flex', alignItems: 'center' }}>
-										<input
-											type="text"
-											value={inputValue}
-											onChange={handleInputChange}
-											autoFocus
-											style={{
-												width: '70px',
-												fontSize: 14,
-												border: feedback[part.id] === false ? '2px solid #e53935' : '2px solid #333',
-												borderRadius: 6,
-												outline: 'none',
-												textAlign: 'center',
-												background: feedback[part.id] === false ? '#ffeaea' : '#fff',
-												marginRight: 4,
-											}}
-										/>
-										{/* Red x-mark if incorrect */}
-										{feedback[part.id] === false && (
-											<span style={{ color: '#e53935', fontSize: 20, marginLeft: 2, marginRight: 4 }}>✗</span>
-										)}
-										<button type="submit" style={{ fontSize: 14, marginLeft: 2 }}>OK</button>
-									</form>
-									{/* Gentle feedback message if incorrect */}
-									{feedback[part.id] === false && lastIncorrect === part.id && (
-										<div style={{ color: '#e53935', fontSize: 13, marginTop: 2 }}>Try again!</div>
-									)}
-								</foreignObject>
-							) : labels[part.id] ? (
-								<g>
-									<text
-										x={part.labelX + 10}
-										y={part.labelY + 5}
-										fontSize="15"
-										fontWeight="bold"
-										fill={feedback[part.id] === true ? '#388e3c' : '#333'}
-										textAnchor="start"
-										alignmentBaseline="middle"
-									>
-										{labels[part.id]}
-									</text>
-									{/* Checkmark only if correct */}
-									{feedback[part.id] === true && (
-										<text x={part.labelX + 65} y={part.labelY + 7} fontSize="18" fill="#7c3aed">✔️</text>
-									)}
-								</g>
-							) : (
-								<text
-									x={part.labelX + 10}
-									y={part.labelY + 5}
-									fontSize="13"
-									fill="#bbb"
-									textAnchor="start"
-									alignmentBaseline="middle"
-									style={{ fontStyle: 'italic' }}
-								>
-									{part.label}
-								</text>
-							)}
-						</g>
-					);
-				})}
+				{/* Labels and descriptions */}
+				{PARTS.map((part) => (
+					<g key={part.id}>
+						<line
+							x1={part.partX}
+							y1={part.partY}
+							x2={part.labelX}
+							y2={part.labelY}
+							stroke="#1976d2"
+							strokeWidth={2}
+						/>
+						{/* Dot at the part end */}
+						<circle
+							cx={part.partX}
+							cy={part.partY}
+							r={4}
+							fill="#1976d2"
+						/>
+						{/* Label */}
+						<text
+							x={part.labelX + 10}
+							y={part.labelY + 5}
+							fontSize="15"
+							fontWeight="bold"
+							fill="#333"
+							textAnchor="start"
+							alignmentBaseline="middle"
+						>
+							{part.label}
+						</text>
+					</g>
+				))}
 			</svg>
-			{/* Reset Button */}
-			<button
-				onClick={handleReset}
-				style={{ marginTop: 24, padding: '10px 32px', fontSize: 16, borderRadius: 8, border: '1px solid #888', background: '#f5f5f5', cursor: 'pointer', fontWeight: 'bold', color: '#333' }}
-			>
-				Reset
-			</button>
+			
+			{/* Description popup */}
+			{selected && (
+				<div style={{
+					position: 'absolute',
+					top: '50%',
+					left: '50%',
+					transform: 'translate(-50%, -50%)',
+					background: 'white',
+					padding: '20px',
+					borderRadius: '8px',
+					boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+					maxWidth: '400px',
+					zIndex: 1000,
+					border: '1px solid #ddd'
+				}}>
+					<h3 style={{ margin: '0 0 10px 0', color: '#1976d2' }}>
+						{PARTS.find(p => p.id === selected)?.label}
+					</h3>
+					<p style={{ margin: 0, lineHeight: 1.5, color: '#333' }}>
+						{PARTS.find(p => p.id === selected)?.description}
+					</p>
+					<button 
+						onClick={() => setSelected(null)}
+						style={{
+							position: 'absolute',
+							top: '10px',
+							right: '10px',
+							background: 'none',
+							border: 'none',
+							fontSize: '20px',
+							cursor: 'pointer',
+							color: '#666'
+						}}
+					>
+						×
+					</button>
+				</div>
+			)}
 		</div>
 	);
 };
