@@ -1,230 +1,106 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import skeletonSVG from '../assets/skeleton_no_text.svg';
 
+// Map SVG group IDs to labels and descriptions
 const PARTS = [
-	{ 
-		id: 'skull', 
-		label: 'Skull', 
-		partX: 250, 
-		partY: 80, 
-		labelX: 400, 
-		labelY: 80,
-		description: 'The skull is the bony structure that forms the head and protects the brain. It consists of 22 bones that are fused together in adults.'
-	},
-	{ 
-		id: 'clavicle', 
-		label: 'Clavicle', 
-		partX: 250, 
-		partY: 140, 
-		labelX: 400, 
-		labelY: 140,
-		description: 'The clavicle, or collarbone, is a long bone that connects the shoulder blade to the sternum. It helps support the shoulder and arm.'
-	},
-	{ 
-		id: 'ribs', 
-		label: 'Ribs', 
-		partX: 250, 
-		partY: 210, 
-		labelX: 400, 
-		labelY: 210,
-		description: 'The ribs are curved bones that form the rib cage, protecting vital organs like the heart and lungs. Humans typically have 12 pairs of ribs.'
-	},
-	{ 
-		id: 'pelvis', 
-		label: 'Pelvis', 
-		partX: 250, 
-		partY: 300, 
-		labelX: 400, 
-		labelY: 300,
-		description: 'The pelvis is a basin-shaped structure that connects the spine to the legs. It supports the weight of the upper body and protects reproductive organs.'
-	},
-	{ 
-		id: 'femur', 
-		label: 'Femur', 
-		partX: 250, 
-		partY: 380, 
-		labelX: 400, 
-		labelY: 380,
-		description: 'The femur, or thigh bone, is the longest and strongest bone in the human body. It connects the hip to the knee.'
-	},
-	{ 
-		id: 'tibia', 
-		label: 'Tibia', 
-		partX: 250, 
-		partY: 460, 
-		labelX: 400, 
-		labelY: 460,
-		description: 'The tibia, or shinbone, is the larger of the two bones in the lower leg. It bears most of the body\'s weight and forms the knee joint with the femur.'
-	},
-	{ 
-		id: 'humerus', 
-		label: 'Humerus', 
-		partX: 140, 
-		partY: 170, 
-		labelX: 60, 
-		labelY: 170,
-		description: 'The humerus is the long bone in the upper arm, connecting the shoulder to the elbow. It allows for arm movement and supports the forearm.'
-	},
+	{ id: 'Skull', label: 'Skull', description: 'The skull is the bony structure that forms the head and protects the brain.' },
+	{ id: 'Spine', label: 'Spine', description: 'The spine (vertebral column) is made up of 33 vertebrae that protect the spinal cord and support the body.' },
+	{ id: 'Ribs', label: 'Ribs', description: 'The ribs are curved bones that form the rib cage, protecting vital organs like the heart and lungs.' },
+	{ id: 'Pelvis', label: 'Pelvis', description: 'The pelvis is a basin-shaped structure that connects the spine to the legs.' },
+	{ id: 'FemurLeft', label: 'Femur (Left)', description: 'The femur, or thigh bone, is the longest and strongest bone in the human body.' },
+	{ id: 'FemurRight', label: 'Femur (Right)', description: 'The femur, or thigh bone, is the longest and strongest bone in the human body.' },
+	{ id: 'TibiaLeft', label: 'Tibia (Left)', description: 'The tibia, or shinbone, is the larger of the two bones in the lower leg.' },
+	{ id: 'TibiaRight', label: 'Tibia (Right)', description: 'The tibia, or shinbone, is the larger of the two bones in the lower leg.' },
+	{ id: 'FibulaLeft', label: 'Fibula (Left)', description: 'The fibula is the thinner and smaller bone of the lower leg.' },
+	{ id: 'FibulaRight', label: 'Fibula (Right)', description: 'The fibula is the thinner and smaller bone of the lower leg.' },
+	{ id: 'FootLeft', label: 'Foot (Left)', description: 'The foot consists of 26 bones that support the body\'s weight and enable walking and running.' },
+	{ id: 'FootRight', label: 'Foot (Right)', description: 'The foot consists of 26 bones that support the body\'s weight and enable walking and running.' },
+	{ id: 'ScapulaLeft', label: 'Scapula (Left)', description: 'The scapula, or shoulder blade, connects the humerus with the clavicle.' },
+	{ id: 'ScapulaRight', label: 'Scapula (Right)', description: 'The scapula, or shoulder blade, connects the humerus with the clavicle.' },
+	{ id: 'HumerusLeft', label: 'Humerus (Left)', description: 'The humerus is the long bone in the upper arm.' },
+	{ id: 'HumerusRight', label: 'Humerus (Right)', description: 'The humerus is the long bone in the upper arm.' },
+	{ id: 'RadiusLeft', label: 'Radius (Left)', description: 'The radius is one of the two bones in the forearm.' },
+	{ id: 'RadiusRight', label: 'Radius (Right)', description: 'The radius is one of the two bones in the forearm.' },
+	// Add more as needed
 ];
+
+// Approximate positions for each part (tweak as needed)
+const PART_POSITIONS = {
+	Skull: { top: 40, left: 180 },
+	Spine: { top: 100, left: 195 },
+	Ribs: { top: 130, left: 160 },
+	Pelvis: { top: 220, left: 180 },
+	FemurLeft: { top: 300, left: 150 },
+	FemurRight: { top: 300, left: 220 },
+	TibiaLeft: { top: 400, left: 150 },
+	TibiaRight: { top: 400, left: 220 },
+	FibulaLeft: { top: 420, left: 140 },
+	FibulaRight: { top: 420, left: 230 },
+	FootLeft: { top: 500, left: 140 },
+	FootRight: { top: 500, left: 230 },
+	ScapulaLeft: { top: 90, left: 130 },
+	ScapulaRight: { top: 90, left: 260 },
+	HumerusLeft: { top: 140, left: 90 },
+	HumerusRight: { top: 140, left: 300 },
+	RadiusLeft: { top: 220, left: 70 },
+	RadiusRight: { top: 220, left: 320 },
+	// ... add more as needed
+};
+
+// Helper to get paired part IDs
+const getPairedPartIds = (id) => {
+	if (id.endsWith('Left')) return [id, id.replace('Left', 'Right')];
+	if (id.endsWith('Right')) return [id, id.replace('Right', 'Left')];
+	return [id];
+};
 
 const TheSkeleton = () => {
 	const [hovered, setHovered] = useState(null);
 	const [selected, setSelected] = useState(null);
 
-	const handlePartClick = (id) => {
-		setSelected(selected === id ? null : id);
-	};
+	// Compute highlighted parts for hover and selection
+	const hoveredParts = hovered ? getPairedPartIds(hovered) : [];
+	const selectedParts = selected ? getPairedPartIds(selected) : [];
 
 	return (
 		<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-			<svg
-				width="500"
-				height="500"
-				viewBox="0 0 500 500"
-				style={{ border: '1px solid #ccc', background: '#fff', borderRadius: 12 }}
-			>
-				{/* Skeleton parts */}
-				{/* Skull */}
-				<circle
-					id="skull"
-					cx="250"
-					cy="80"
-					r="40"
-					fill={hovered === 'skull' ? '#ffe066' : '#fff'}
-					stroke="#333"
-					strokeWidth="2"
-					onMouseEnter={() => setHovered('skull')}
-					onMouseLeave={() => setHovered(null)}
-					onClick={() => handlePartClick('skull')}
-					style={{ cursor: 'pointer' }}
-				/>
-				{/* Clavicle */}
-				<rect
-					id="clavicle"
-					x="250"
-					y="140"
-					width="120"
-					height="15"
-					fill={hovered === 'clavicle' ? '#ffe066' : '#fff'}
-					stroke="#333"
-					strokeWidth="2"
-					onMouseEnter={() => setHovered('clavicle')}
-					onMouseLeave={() => setHovered(null)}
-					onClick={() => handlePartClick('clavicle')}
-					style={{ cursor: 'pointer' }}
-				/>
-				{/* Humerus (left) */}
-				<rect
-					id="humerus"
-					x="140"
-					y="170"
-					width="25"
-					height="90"
-					fill={hovered === 'humerus' ? '#ffe066' : '#fff'}
-					stroke="#333"
-					strokeWidth="2"
-					onMouseEnter={() => setHovered('humerus')}
-					onMouseLeave={() => setHovered(null)}
-					onClick={() => handlePartClick('humerus')}
-					style={{ cursor: 'pointer' }}
-				/>
-				{/* Ribs */}
-				<ellipse
-					id="ribs"
-					cx="250"
-					cy="210"
-					rx="80"
-					ry="60"
-					fill={hovered === 'ribs' ? '#ffe066' : '#fff'}
-					stroke="#333"
-					strokeWidth="2"
-					onMouseEnter={() => setHovered('ribs')}
-					onMouseLeave={() => setHovered(null)}
-					onClick={() => handlePartClick('ribs')}
-					style={{ cursor: 'pointer' }}
-				/>
-				{/* Pelvis */}
-				<ellipse
-					id="pelvis"
-					cx="250"
-					cy="300"
-					rx="70"
-					ry="40"
-					fill={hovered === 'pelvis' ? '#ffe066' : '#fff'}
-					stroke="#333"
-					strokeWidth="2"
-					onMouseEnter={() => setHovered('pelvis')}
-					onMouseLeave={() => setHovered(null)}
-					onClick={() => handlePartClick('pelvis')}
-					style={{ cursor: 'pointer' }}
-				/>
-				{/* Femur (left) */}
-				<rect
-					id="femur"
-					x="250"
-					y="380"
-					width="25"
-					height="80"
-					fill={hovered === 'femur' ? '#ffe066' : '#fff'}
-					stroke="#333"
-					strokeWidth="2"
-					onMouseEnter={() => setHovered('femur')}
-					onMouseLeave={() => setHovered(null)}
-					onClick={() => handlePartClick('femur')}
-					style={{ cursor: 'pointer' }}
-				/>
-				{/* Tibia (left) */}
-				<rect
-					id="tibia"
-					x="250"
-					y="460"
-					width="25"
-					height="50"
-					fill={hovered === 'tibia' ? '#ffe066' : '#fff'}
-					stroke="#333"
-					strokeWidth="2"
-					onMouseEnter={() => setHovered('tibia')}
-					onMouseLeave={() => setHovered(null)}
-					onClick={() => handlePartClick('tibia')}
-					style={{ cursor: 'pointer' }}
-				/>
-				{/* Labels and descriptions */}
-				{PARTS.map((part) => (
-					<g key={part.id}>
-						<line
-							x1={part.partX}
-							y1={part.partY}
-							x2={part.labelX}
-							y2={part.labelY}
-							stroke="#1976d2"
-							strokeWidth={2}
-						/>
-						{/* Dot at the part end */}
-						<circle
-							cx={part.partX}
-							cy={part.partY}
-							r={4}
-							fill="#1976d2"
-						/>
-						{/* Label */}
-						<text
-							x={part.labelX + 10}
-							y={part.labelY + 5}
-							fontSize="15"
-							fontWeight="bold"
-							fill="#333"
-							textAnchor="start"
-							alignmentBaseline="middle"
-						>
-							{part.label}
-						</text>
-					</g>
+			<div style={{ position: 'relative', width: 400, height: 600, background: '#fff', border: '1px solid #eee' }}>
+				{PARTS.map(part => (
+					<div
+						key={part.id}
+						style={{
+							position: 'absolute',
+							top: PART_POSITIONS[part.id]?.top,
+							left: PART_POSITIONS[part.id]?.left,
+							width: 40,
+							height: 40,
+							borderRadius: '50%',
+							background: hoveredParts.includes(part.id) ? 'gold' : '#222',
+							opacity: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 0.8 : 0.5,
+							border: selectedParts.includes(part.id) ? '3px solid #1976d2' : '2px solid #fff',
+							cursor: 'pointer',
+							transition: 'all 0.2s',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							color: '#fff',
+							fontWeight: 'bold',
+							fontSize: 12,
+							zIndex: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 2 : 1,
+						}}
+						onMouseEnter={() => setHovered(part.id)}
+						onMouseLeave={() => setHovered(null)}
+						onClick={() => setSelected(part.id)}
+						title={part.label}
+					>
+						{part.label.split(' ')[0]}
+					</div>
 				))}
-			</svg>
-			
+			</div>
 			{/* Description popup */}
 			{selected && (
 				<div style={{
-					position: 'absolute',
+					position: 'fixed',
 					top: '50%',
 					left: '50%',
 					transform: 'translate(-50%, -50%)',
