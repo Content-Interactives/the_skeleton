@@ -167,6 +167,7 @@ const TheSkeleton = () => {
 	const [selected, setSelected] = useState(null);
 	const [loadedSVGs, setLoadedSVGs] = useState({});
 	const containerRef = useRef(null);
+	const popupRef = useRef(null);
 
 	// Load SVG content as text - keep original styling intact
 	useEffect(() => {
@@ -262,6 +263,22 @@ const TheSkeleton = () => {
 	const hoveredParts = hovered ? getPairedPartIds(hovered) : [];
 	const selectedParts = selected ? getPairedPartIds(selected) : [];
 
+	// Close popup and clear highlight when clicking outside the popup
+	useEffect(() => {
+		if (!selected) return;
+		const handleClick = (e) => {
+			// If click is inside the popup, do nothing
+			if (popupRef.current && popupRef.current.contains(e.target)) return;
+			// If click is on a skeleton part, do nothing (let part click handler update the popup)
+			if (e.target.closest('.skeleton-part')) return;
+			// Otherwise, close popup and clear highlight
+			setSelected(null);
+			setHovered(null);
+		};
+		document.addEventListener('mousedown', handleClick);
+		return () => document.removeEventListener('mousedown', handleClick);
+	}, [selected]);
+
 	if (Object.keys(loadedSVGs).length === 0) {
 		return (
 			<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -317,19 +334,22 @@ const TheSkeleton = () => {
 			</div>
 			{/* Description popup */}
 			{selected && (
-				<div style={{
-					position: 'fixed',
-					top: '50%',
-					left: '50%',
-					transform: 'translate(-50%, -50%)',
-					background: 'white',
-					padding: '20px',
-					borderRadius: '8px',
-					boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-					maxWidth: '400px',
-					zIndex: 1000,
-					border: '1px solid #ddd'
-				}}>
+				<div
+					ref={popupRef}
+					style={{
+						position: 'fixed',
+						top: '50%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						background: 'white',
+						padding: '20px',
+						borderRadius: '8px',
+						boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+						maxWidth: '400px',
+						zIndex: 1000,
+						border: '1px solid #ddd'
+					}}
+				>
 					<h3 style={{ margin: '0 0 10px 0', color: '#1976d2' }}>
 						{PARTS.find(p => p.id === selected)?.label}
 					</h3>
