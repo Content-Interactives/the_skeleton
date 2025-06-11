@@ -98,61 +98,61 @@ const PARTS = [
 	{ id: 'PhalangesFootRight', label: 'Toe Phalanges (Right)', description: 'The phalanges are the toe bones, with 14 bones in each foot.', svg: PhalangesFootRightSvg },
 ];
 
-// Well-spaced anatomical skeleton - using precise coordinates from script.js
+// Well-spaced anatomical skeleton - moved left by 150px total
 const PART_POSITIONS = {
 	// Head and neck
-	Skull: { top: 16.12, left: 227.2, width: 54.43 },
-	Mandible: { top: 65.14, left: 229.91, width: 48.85 },
+	Skull: { top: -43.88, left: 227.2, width: 54.43, height: 70.8 },
+	Mandible: { top: 5.14, left: 229.91, width: 48.85, height: 35.21 },
 	
 	// Spine
-	CervicalVertebrae: { top: 71.43, left: 239.5, width: 30.73 },
-	ThoracicVertebrae: { top: 111.52, left: 246.28, width: 15.7 },
-	LumbarVertebrae: { top: 224.15, left: 237.9, width: 32.77 },
-	Sacrum: { top: 271.85, left: 234.2, width: 38.92 },
-	Coccyx: { top: 302.12, left: 248.12, width: 10.73 },
+	CervicalVertebrae: { top: 11.43, left: 239.5, width: 30.73, height: 45.96 },
+	ThoracicVertebrae: { top: 51.52, left: 246.28, width: 15.7, height: 114.64 },
+	LumbarVertebrae: { top: 164.15, left: 237.9, width: 32.77, height: 59.15 },
+	Sacrum: { top: 211.85, left: 234.2, width: 38.92, height: 31.93 },
+	Coccyx: { top: 242.12, left: 248.12, width: 10.73, height: 10.79 },
 	
 	// Chest
-	Manubrium: { top: 123.17, left: 244.34, width: 21.85 },
-	Sternum: { top: 137.88, left: 247.39, width: 15.4 },
-	Ribs: { top: 112.12, left: 201.65, width: 106.86 },
+	Manubrium: { top: 63.17, left: 244.34, width: 21.85, height: 17.83 },
+	Sternum: { top: 77.88, left: 247.39, width: 15.4, height: 54.94 },
+	Ribs: { top: 52.12, left: 201.65, width: 106.86, height: 128.05 },
 	
 	// Shoulders and arms
-	ClavicleLeft: { top: 113.89, left: 261.4, width: 54.68 },
-	ClavicleRight: { top: 112.78, left: 195.2, width: 53.96 },
-	Scapula: { top: 114.19, left: 185.38, width: 139.81 },
-	HumerusLeft: { top: 132.03, left: 309.76, width: 39.45 },
-	HumerusRight: { top: 132.85, left: 151.6, width: 49.95 },
-	RadiusLeft: { top: 240.46, left: 341.51, width: 33.56 },
-	RadiusRight: { top: 241.75, left: 151.14, width: 19.16 },
-	UlnaLeft: { top: 243.42, left: 331.6, width: 31.44 },
-	UlnaRight: { top: 242.63, left: 148.54, width: 22.76 },
+	ClavicleLeft: { top: 53.89, left: 261.4, width: 54.68, height: 13.64 },
+	ClavicleRight: { top: 52.78, left: 195.2, width: 53.96, height: 14.55 },
+	Scapula: { top: 54.19, left: 185.38, width: 139.81, height: 66.65 },
+	HumerusLeft: { top: 72.03, left: 309.76, width: 39.45, height: 115.6 },
+	HumerusRight: { top: 72.85, left: 151.6, width: 49.95, height: 113.19 },
+	RadiusLeft: { top: 180.46, left: 341.51, width: 33.56, height: 84.45 },
+	RadiusRight: { top: 181.75, left: 151.14, width: 19.16, height: 88.46 },
+	UlnaLeft: { top: 183.42, left: 331.6, width: 31.44, height: 82.39 },
+	UlnaRight: { top: 182.63, left: 148.54, width: 22.76, height: 87.92 },
 	
 	// Hands
-	CarpalsLeft: { top: 322.03, left: 356.76, width: 22.69 },
-	CarpalsRight: { top: 328.36, left: 149.11, width: 22.54 },
-	MetacarpalsLeft: { top: 326.99, left: 357.85, width: 36.04 },
-	MetacarpalsRight: { top: 335.59, left: 146.61, width: 35.01 },
-	PhalangesLeft: { top: 330.09, left: 360.3, width: 47.59 },
-	PhalangesRight: { top: 344.45, left: 145.1, width: 45.8 },
+	CarpalsLeft: { top: 262.03, left: 356.76, width: 22.69, height: 15.39 },
+	CarpalsRight: { top: 268.36, left: 149.11, width: 22.54, height: 14.18 },
+	MetacarpalsLeft: { top: 266.99, left: 357.85, width: 36.04, height: 29.76 },
+	MetacarpalsRight: { top: 275.59, left: 146.61, width: 35.01, height: 28.13 },
+	PhalangesLeft: { top: 270.09, left: 360.3, width: 47.59, height: 54.99 },
+	PhalangesRight: { top: 284.45, left: 145.1, width: 45.8, height: 49.53 },
 	
 	// Pelvis and legs
-	Pelvis: { top: 255.99, left: 199.92, width: 109.48 },
-	FemurLeft: { top: 305.36, left: 257.17, width: 55.78 },
-	FemurRight: { top: 303.23, left: 192.89, width: 56.71 },
-	PatellaLeft: { top: 465.99, left: 265.04, width: 19.3 },
-	PatellaRight: { top: 466.03, left: 221.57, width: 19.3 },
-	TibiaLeft: { top: 473.22, left: 253.04, width: 35.91 },
-	TibiaRight: { top: 473.88, left: 216.55, width: 34.46 },
-	FibulaLeft: { top: 484.23, left: 271.23, width: 19.01 },
-	FibulaRight: { top: 485.33, left: 215.34, width: 17.21 },
+	Pelvis: { top: 195.99, left: 199.92, width: 109.48, height: 76.15 },
+	FemurLeft: { top: 245.36, left: 257.17, width: 55.78, height: 169.57 },
+	FemurRight: { top: 243.23, left: 192.89, width: 56.71, height: 169.41 },
+	PatellaLeft: { top: 405.99, left: 265.04, width: 19.3, height: 18.96 },
+	PatellaRight: { top: 406.03, left: 221.57, width: 19.3, height: 18.96 },
+	TibiaLeft: { top: 413.22, left: 253.04, width: 35.91, height: 141.42 },
+	TibiaRight: { top: 413.88, left: 216.55, width: 34.46, height: 141.32 },
+	FibulaLeft: { top: 424.23, left: 271.23, width: 19.01, height: 125.79 },
+	FibulaRight: { top: 425.33, left: 215.34, width: 17.21, height: 126.27 },
 	
 	// Feet
-	TarsalsLeft: { top: 605.90, left: 254.23, width: 29.80 },
-	TarsalsRight: { top: 605.85, left: 219.35, width: 29.88 },
-	MetatarsalsLeft: { top: 619.20, left: 261.03, width: 34.24 },
-	MetatarsalsRight: { top: 619.37, left: 208.88, width: 34.01 },
-	PhalangesFootLeft: { top: 633.87, left: 274.77, width: 30.47 },
-	PhalangesFootRight: { top: 634.28, left: 199.52, width: 30.41 },
+	TarsalsLeft: { top: 545.90, left: 254.23, width: 29.80, height: 27.58 },
+	TarsalsRight: { top: 545.85, left: 219.35, width: 29.88, height: 26.14 },
+	MetatarsalsLeft: { top: 559.20, left: 261.03, width: 34.24, height: 25.96 },
+	MetatarsalsRight: { top: 559.37, left: 208.88, width: 34.01, height: 24.34 },
+	PhalangesFootLeft: { top: 573.87, left: 274.77, width: 30.47, height: 22.79 },
+	PhalangesFootRight: { top: 574.28, left: 199.52, width: 30.41, height: 20.86 },
 };
 
 // Helper to get paired part IDs
@@ -168,7 +168,7 @@ const TheSkeleton = () => {
 	const [loadedSVGs, setLoadedSVGs] = useState({});
 	const containerRef = useRef(null);
 
-	// Load SVG content as text to access individual paths
+	// Load SVG content as text - keep original styling intact
 	useEffect(() => {
 		const loadSVGContent = async () => {
 			const svgPromises = PARTS.map(async (part) => {
@@ -191,36 +191,43 @@ const TheSkeleton = () => {
 		loadSVGContent();
 	}, []);
 
-	// Set up precise hover detection using CSS pointer-events and global mouse tracking
+	// Set up precise hover detection using CSS pointer-events and styling from script.js approach
 	useEffect(() => {
 		if (Object.keys(loadedSVGs).length === 0) return;
 
 		const style = document.createElement('style');
 		style.textContent = `
-			/* Disable pointer events on entire SVG */
-			.skeleton-part svg {
+			/* Base bone styling similar to original styles.css */
+			.skeleton-part {
+				position: absolute;
 				pointer-events: none;
 			}
-			
-			/* Enable pointer events only on filled paths */
-			.skeleton-part svg path:not([fill="none"]):not([fill="transparent"]),
-			.skeleton-part svg g path:not([fill="none"]):not([fill="transparent"]) {
+
+			.skeleton-part svg {
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+
+			.skeleton-part svg path {
 				pointer-events: all;
 				cursor: pointer;
+				transition: all 0.2s ease;
+			}
+
+			/* Hover effects without overriding original fill */
+			.skeleton-part svg path:hover {
+				opacity: 0.8;
 			}
 		`;
 		document.head.appendChild(style);
 
-		// Global mouse tracking to handle hover state
+		// Global mouse tracking to handle hover state with more forgiving detection
 		const handleGlobalMouseMove = (e) => {
 			const target = e.target;
 			
-			// Check if we're hovering over a clickable path
-			if (target.tagName === 'path' && 
-				target.style.pointerEvents !== 'none' &&
-				target.getAttribute('fill') !== 'none' &&
-				target.getAttribute('fill') !== 'transparent') {
-				
+			// Check if we're hovering over a clickable path (more forgiving approach)
+			if (target.tagName === 'path') {
 				// Find the part this path belongs to
 				const partElement = target.closest('.skeleton-part');
 				if (partElement) {
@@ -230,7 +237,15 @@ const TheSkeleton = () => {
 				}
 			}
 			
-			// If we're not over a valid path, clear hover
+			// Also check if we're over the bone container (as fallback)
+			const boneContainer = target.closest('.skeleton-part');
+			if (boneContainer) {
+				const partId = boneContainer.dataset.part;
+				setHovered(partId);
+				return;
+			}
+			
+			// If we're not over a valid target, clear hover
 			setHovered(null);
 		};
 
@@ -256,46 +271,49 @@ const TheSkeleton = () => {
 	}
 
 	return (
-		<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-			<div ref={containerRef} style={{ position: 'relative', width: 800, height: 700, background: '#fff', border: '1px solid #eee' }}>
-				{PARTS.map(part => {
-					const position = PART_POSITIONS[part.id];
-					const svgContent = loadedSVGs[part.id];
-					if (!position || !svgContent) return null;
-					
-					return (
-						<div
-							key={part.id}
-							className="skeleton-part"
-							data-part={part.id}
-							style={{
-								position: 'absolute',
-								top: position.top,
-								left: position.left,
-								width: `${position.width}px`,
-								height: 'auto',
-								transition: 'all 0.3s ease',
-								zIndex: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 10 : 
-								        (part.id === 'Skull' || part.id === 'Mandible') ? 5 : 1,
-								transform: `${hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 'scale(1.05)' : 'scale(1)'}`,
-								transformOrigin: 'center center',
-								filter: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 
-									'drop-shadow(0 0 10px #1976d2) brightness(1.2)' : 
-									'none',
-								opacity: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 1 : 0.85,
-							}}
-							onClick={(e) => {
-								// Only respond to clicks that come from SVG paths with pointer-events enabled
-								const target = e.target;
-								if (target.tagName === 'path' && target.style.pointerEvents !== 'none') {
-									setSelected(part.id);
-								}
-							}}
-							title={part.label}
-							dangerouslySetInnerHTML={{ __html: svgContent }}
-						/>
-					);
-				})}
+		<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', fontFamily: 'Arial, sans-serif', padding: '20px', overflow: 'hidden' }}>
+			<div style={{ position: 'relative', width: 500, height: 600 }}>
+				{/* Border box absolutely positioned, shifted up 50px */}
+				<div style={{ position: 'absolute', top: -50, left: 0, width: 500, height: 650, border: '2px solid #bbb', borderRadius: 12, pointerEvents: 'none', boxSizing: 'border-box' }} />
+				<div ref={containerRef} style={{ position: 'relative', width: 500, height: 600, overflow: 'visible' }}>
+					{PARTS.map(part => {
+						const position = PART_POSITIONS[part.id];
+						const svgContent = loadedSVGs[part.id];
+						if (!position || !svgContent) return null;
+						
+						return (
+							<div
+								key={part.id}
+								className="skeleton-part"
+								data-part={part.id}
+								style={{
+									position: 'absolute',
+									top: position.top,
+									left: position.left,
+									width: `${position.width}px`,
+									height: `${position.height}px`,
+									transition: 'all 0.3s ease',
+									zIndex: (part.id === 'Skull' || part.id === 'Mandible') ? 5 : 1,
+									transform: `${hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 'scale(1.05)' : 'scale(1)'}`,
+									transformOrigin: 'center center',
+									filter: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 
+										'drop-shadow(0 0 10px #1976d2) brightness(1.2)' : 
+										'none',
+									opacity: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 1 : 0.85,
+								}}
+								onClick={(e) => {
+									// More forgiving click detection - respond to clicks on paths or container
+									const target = e.target;
+									if (target.tagName === 'path' || target.closest('.skeleton-part')) {
+										setSelected(part.id);
+									}
+								}}
+								title={part.label}
+								dangerouslySetInnerHTML={{ __html: svgContent }}
+							/>
+						);
+					})}
+				</div>
 			</div>
 			{/* Description popup */}
 			{selected && (
