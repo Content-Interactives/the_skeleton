@@ -191,7 +191,7 @@ const TheSkeleton = () => {
 		loadSVGContent();
 	}, []);
 
-	// Set up precise hover detection using CSS pointer-events
+	// Set up precise hover detection using CSS pointer-events and global mouse tracking
 	useEffect(() => {
 		if (Object.keys(loadedSVGs).length === 0) return;
 
@@ -211,8 +211,35 @@ const TheSkeleton = () => {
 		`;
 		document.head.appendChild(style);
 
+		// Global mouse tracking to handle hover state
+		const handleGlobalMouseMove = (e) => {
+			const target = e.target;
+			
+			// Check if we're hovering over a clickable path
+			if (target.tagName === 'path' && 
+				target.style.pointerEvents !== 'none' &&
+				target.getAttribute('fill') !== 'none' &&
+				target.getAttribute('fill') !== 'transparent') {
+				
+				// Find the part this path belongs to
+				const partElement = target.closest('.skeleton-part');
+				if (partElement) {
+					const partId = partElement.dataset.part;
+					setHovered(partId);
+					return;
+				}
+			}
+			
+			// If we're not over a valid path, clear hover
+			setHovered(null);
+		};
+
+		// Add global mouse move listener
+		document.addEventListener('mousemove', handleGlobalMouseMove);
+
 		return () => {
 			document.head.removeChild(style);
+			document.removeEventListener('mousemove', handleGlobalMouseMove);
 		};
 	}, [loadedSVGs]);
 
@@ -257,13 +284,10 @@ const TheSkeleton = () => {
 									'none',
 								opacity: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 1 : 0.85,
 							}}
-							onMouseEnter={() => setHovered(part.id)}
-							onMouseLeave={() => setHovered(null)}
 							onClick={(e) => {
 								// Only respond to clicks that come from SVG paths with pointer-events enabled
 								const target = e.target;
 								if (target.tagName === 'path' && target.style.pointerEvents !== 'none') {
-									console.log(`Clicked on ${part.id}`);
 									setSelected(part.id);
 								}
 							}}
