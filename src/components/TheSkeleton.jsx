@@ -106,7 +106,7 @@ const PART_POSITIONS = {
 	
 	// Spine
 	CervicalVertebrae: { top: 11.43, left: 239.5, width: 30.73, height: 45.96 },
-	ThoracicVertebrae: { top: 51.52, left: 246.28, width: 15.7, height: 114.64 },
+	ThoracicVertebrae: { top: 71.52, left: 246.28, width: 15.7, height: 114.64 },
 	LumbarVertebrae: { top: 164.15, left: 237.9, width: 32.77, height: 59.15 },
 	Sacrum: { top: 211.85, left: 234.2, width: 38.92, height: 31.93 },
 	Coccyx: { top: 242.12, left: 248.12, width: 10.73, height: 10.79 },
@@ -310,13 +310,23 @@ const TheSkeleton = () => {
 									width: `${position.width}px`,
 									height: `${position.height}px`,
 									transition: 'all 0.3s ease',
-									zIndex: (part.id === 'Skull' || part.id === 'Mandible') ? 5 : 1,
+									zIndex: (part.id === 'Skull' || part.id === 'Mandible') ? 5 : 
+										(part.id === 'Scapula') ? 0 : 1,
 									transform: `${hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 'scale(1.05)' : 'scale(1)'}`,
 									transformOrigin: 'center center',
-									filter: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 
-										'drop-shadow(0 0 10px #1976d2) brightness(1.2)' : 
-										'none',
-									opacity: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 1 : 0.85,
+									filter: selected ? 
+										(selectedParts.includes(part.id) ? 
+											'drop-shadow(0 0 10px #1976d2) brightness(1.2)' : 
+											(hoveredParts.includes(part.id) ?
+												'grayscale(50%) brightness(1.1) drop-shadow(0 0 8px #1976d2)' :
+												'grayscale(100%) brightness(0.8)')) :
+										(hoveredParts.includes(part.id) ? 
+											'drop-shadow(0 0 10px #1976d2) brightness(1.2)' : 
+											'none'),
+									opacity: selected ? 
+										(selectedParts.includes(part.id) ? 1 : 
+											(hoveredParts.includes(part.id) ? 0.85 : 0.4)) :
+										(hoveredParts.includes(part.id) ? 1 : 0.85),
 								}}
 								onClick={(e) => {
 									// More forgiving click detection - respond to clicks on paths or container
