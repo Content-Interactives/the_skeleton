@@ -166,6 +166,7 @@ const TheSkeleton = () => {
 	const [hovered, setHovered] = useState(null);
 	const [selected, setSelected] = useState(null);
 	const [loadedSVGs, setLoadedSVGs] = useState({});
+	const [popupPosition, setPopupPosition] = useState({ top: 10, left: 10 });
 	const containerRef = useRef(null);
 	const popupRef = useRef(null);
 
@@ -279,6 +280,62 @@ const TheSkeleton = () => {
 		return () => document.removeEventListener('mousedown', handleClick);
 	}, [selected]);
 
+	// Function to calculate popup position (improved)
+	const calculatePopupPosition = (clickX, clickY, partId) => {
+		const container = containerRef.current;
+		const popup = popupRef.current;
+		if (!container) return { top: 10, left: 10 };
+
+		const containerRect = container.getBoundingClientRect();
+		const partPosition = PART_POSITIONS[partId];
+		if (!partPosition) return { top: 10, left: 10 };
+
+		// Popup size (fallback to 220x110 if not rendered yet)
+		const popupWidth = popup?.offsetWidth || 220;
+		const popupHeight = popup?.offsetHeight || 110;
+
+		// Try four corners: above-left, above-right, below-left, below-right
+		const candidates = [
+			{
+				top: partPosition.top - popupHeight - 10,
+				left: partPosition.left,
+			},
+			{
+				top: partPosition.top - popupHeight - 10,
+				left: partPosition.left + partPosition.width - popupWidth,
+			},
+			{
+				top: partPosition.top + partPosition.height + 10,
+				left: partPosition.left,
+			},
+			{
+				top: partPosition.top + partPosition.height + 10,
+				left: partPosition.left + partPosition.width - popupWidth,
+			},
+		];
+
+		// Check which candidate fits best (inside container and not overlapping part)
+		const fits = candidates.find(pos =>
+			pos.top >= 0 &&
+			pos.left >= 0 &&
+			pos.top + popupHeight <= containerRect.height &&
+			pos.left + popupWidth <= containerRect.width &&
+			// Not overlapping the part's bounding box
+			!(pos.top + popupHeight > partPosition.top &&
+				pos.top < partPosition.top + partPosition.height &&
+				pos.left + popupWidth > partPosition.left &&
+				pos.left < partPosition.left + partPosition.width)
+		);
+
+		let best = fits || candidates[2]; // Default to below-left if none fit
+
+		// Clamp to container if needed
+		best.top = Math.max(0, Math.min(best.top, containerRect.height - popupHeight));
+		best.left = Math.max(0, Math.min(best.left, containerRect.width - popupWidth));
+
+		return best;
+	};
+
 	if (Object.keys(loadedSVGs).length === 0) {
 		return (
 			<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -288,7 +345,16 @@ const TheSkeleton = () => {
 	}
 
 	return (
-		<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', fontFamily: 'Arial, sans-serif', padding: '20px', overflow: 'hidden' }}>
+		<div style={{ 
+			height: '100vh', 
+			display: 'flex', 
+			alignItems: 'center', 
+			justifyContent: 'center', 
+			flexDirection: 'column', 
+			fontFamily: 'Arial, sans-serif', 
+			padding: '20px', 
+			overflow: 'hidden'
+		}}>
 			<div style={{ position: 'relative', width: 500, height: 600 }}>
 				{/* Border box absolutely positioned, shifted up 50px */}
 				<div style={{ position: 'absolute', top: -50, left: 0, width: 500, height: 650, border: '2px solid #bbb', borderRadius: 12, pointerEvents: 'none', boxSizing: 'border-box' }} />
@@ -329,10 +395,13 @@ const TheSkeleton = () => {
 										(hoveredParts.includes(part.id) ? 1 : 0.85),
 								}}
 								onClick={(e) => {
-									// More forgiving click detection - respond to clicks on paths or container
 									const target = e.target;
 									if (target.tagName === 'path' || target.closest('.skeleton-part')) {
 										setSelected(part.id);
+										setTimeout(() => {
+											const newPosition = calculatePopupPosition(e.clientX, e.clientY, part.id);
+											setPopupPosition(newPosition);
+										}, 0); // Wait for popup to render
 									}
 								}}
 								title={part.label}
@@ -341,48 +410,62 @@ const TheSkeleton = () => {
 						);
 					})}
 				</div>
-			</div>
-			{/* Description popup */}
-			{selected && (
-				<div
-					ref={popupRef}
-					style={{
-						position: 'fixed',
-						top: '50%',
-						left: '50%',
-						transform: 'translate(-50%, -50%)',
-						background: 'white',
-						padding: '20px',
-						borderRadius: '8px',
-						boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-						maxWidth: '400px',
-						zIndex: 1000,
-						border: '1px solid #ddd'
-					}}
-				>
-					<h3 style={{ margin: '0 0 10px 0', color: '#1976d2' }}>
-						{PARTS.find(p => p.id === selected)?.label}
-					</h3>
-					<p style={{ margin: 0, lineHeight: 1.5, color: '#333' }}>
-						{PARTS.find(p => p.id === selected)?.description}
-					</p>
-					<button 
-						onClick={() => setSelected(null)}
+				{/* Description popup - now with dynamic positioning */}
+				{selected && (
+					<div
+						ref={popupRef}
 						style={{
 							position: 'absolute',
-							top: '10px',
-							right: '10px',
-							background: 'none',
-							border: 'none',
-							fontSize: '20px',
-							cursor: 'pointer',
-							color: '#666'
+							top: `${popupPosition.top}px`,
+							left: `${popupPosition.left}px`,
+							background: 'rgba(255,255,255,0.5)',
+							backdropFilter: 'blur(8px)',
+							WebkitBackdropFilter: 'blur(8px)',
+							padding: '15px',
+							borderRadius: '8px',
+							boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+							width: '200px',
+							zIndex: 1000,
+							border: '1px solid rgba(220,220,220,0.7)',
+							fontSize: '0.9em',
+							transition: 'all 0.2s ease-out'
 						}}
 					>
-						×
-					</button>
-				</div>
-			)}
+						<h3 style={{ 
+							margin: '0 0 8px 0', 
+							color: '#1976d2',
+							fontSize: '1.1em'
+						}}>
+							{PARTS.find(p => p.id === selected)?.label}
+						</h3>
+						<p style={{ 
+							margin: 0, 
+							lineHeight: 1.4, 
+							color: '#333',
+							fontSize: '0.95em'
+						}}>
+							{PARTS.find(p => p.id === selected)?.description}
+						</p>
+						<button 
+							onClick={() => setSelected(null)}
+							style={{
+								position: 'absolute',
+								top: '5px',
+								right: '5px',
+								background: 'none',
+								border: 'none',
+								fontSize: '18px',
+								cursor: 'pointer',
+								color: '#666',
+								padding: '2px 6px',
+								lineHeight: 1
+							}}
+						>
+							×
+						</button>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };
