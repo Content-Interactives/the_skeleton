@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skeletal System</title>
+    <style>
+        .skeleton-container {
+            position: relative;
+            width: 1000px;
+            height: 800px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+
+        .bone {
+            position: absolute;
+            transform-origin: center;
+        }
+
+        /* Position the cranium at the top */
+        #cranium {
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+        }
+
+        /* Position the manubrium below the cranium */
+        #manubrium {
+            top: 250px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+        }
+
+        /* Position the left humerus */
+        #humerus-left {
+            top: 300px;
+            left: 30%;
+            transform: rotate(45deg);
+            width: 150px;
+        }
+
+        /* Add more bone positions as needed */
+    </style>
+</head>
+<body>
+    <div class="skeleton-container">
+        <object id="cranium" class="bone" data="Cranium.svg" type="image/svg+xml"></object>
+        <object id="manubrium" class="bone" data="Manubrium.svg" type="image/svg+xml"></object>
+        <object id="humerus-left" class="bone" data="HumerusLeft.svg" type="image/svg+xml"></object>
+    </div>
+</body>
+</html> 
