@@ -98,71 +98,61 @@ const PARTS = [
 	{ id: 'PhalangesFootRight', label: 'Toe Phalanges (Right)', description: 'The phalanges are the toe bones, with 14 bones in each foot.', svg: PhalangesFootRightSvg },
 ];
 
-// Well-spaced anatomical skeleton - connected but clearly visible
+// Well-spaced anatomical skeleton - using precise coordinates from script.js
 const PART_POSITIONS = {
-	// Head - centered and prominent
-	Skull: { top: 15, left: 350, rotation: 0 },
-	Mandible: { top: 75, left: 355, rotation: 0 },
+	// Head and neck
+	Skull: { top: 16.12, left: 227.2, width: 54.43 },
+	Mandible: { top: 65.14, left: 229.91, width: 48.85 },
 	
-	// Spine - continuous chain down center with spacing
-	CervicalVertebrae: { top: 100, left: 365, rotation: 0 },
-	ThoracicVertebrae: { top: 140, left: 365, rotation: 0 },
-	LumbarVertebrae: { top: 200, left: 365, rotation: 0 },
-	Sacrum: { top: 250, left: 365, rotation: 0 },
-	Coccyx: { top: 285, left: 365, rotation: 0 },
+	// Spine
+	CervicalVertebrae: { top: 71.43, left: 239.5, width: 30.73 },
+	ThoracicVertebrae: { top: 111.52, left: 246.28, width: 15.7 },
+	LumbarVertebrae: { top: 224.15, left: 237.9, width: 32.77 },
+	Sacrum: { top: 271.85, left: 234.2, width: 38.92 },
+	Coccyx: { top: 302.12, left: 248.12, width: 10.73 },
 	
-	// Chest - well-positioned around spine
-	Manubrium: { top: 125, left: 365, rotation: 0 },
-	Sternum: { top: 155, left: 365, rotation: 0 },
-	Ribs: { top: 150, left: 320, rotation: 0 },
+	// Chest
+	Manubrium: { top: 123.17, left: 244.34, width: 21.85 },
+	Sternum: { top: 137.88, left: 247.39, width: 15.4 },
+	Ribs: { top: 112.12, left: 201.65, width: 106.86 },
 	
-	// Shoulders - wider shoulder span
-	ClavicleLeft: { top: 120, left: 320, rotation: 0 },
-	ClavicleRight: { top: 120, left: 410, rotation: 0 },
-	Scapula: { top: 135, left: 340, rotation: 0 },
+	// Shoulders and arms
+	ClavicleLeft: { top: 113.89, left: 261.4, width: 54.68 },
+	ClavicleRight: { top: 112.78, left: 195.2, width: 53.96 },
+	Scapula: { top: 114.19, left: 185.38, width: 139.81 },
+	HumerusLeft: { top: 132.03, left: 309.76, width: 39.45 },
+	HumerusRight: { top: 132.85, left: 151.6, width: 49.95 },
+	RadiusLeft: { top: 240.46, left: 341.51, width: 33.56 },
+	RadiusRight: { top: 241.75, left: 151.14, width: 19.16 },
+	UlnaLeft: { top: 243.42, left: 331.6, width: 31.44 },
+	UlnaRight: { top: 242.63, left: 148.54, width: 22.76 },
 	
-	// Arms - spread naturally from shoulders
-	HumerusLeft: { top: 150, left: 270, rotation: 0 },
-	HumerusRight: { top: 150, left: 460, rotation: 180 },
+	// Hands
+	CarpalsLeft: { top: 322.03, left: 356.76, width: 22.69 },
+	CarpalsRight: { top: 328.36, left: 149.11, width: 22.54 },
+	MetacarpalsLeft: { top: 326.99, left: 357.85, width: 36.04 },
+	MetacarpalsRight: { top: 335.59, left: 146.61, width: 35.01 },
+	PhalangesLeft: { top: 330.09, left: 360.3, width: 47.59 },
+	PhalangesRight: { top: 344.45, left: 145.1, width: 45.8 },
 	
-	// Forearms - positioned with good spacing
-	RadiusLeft: { top: 210, left: 265, rotation: 0 },
-	RadiusRight: { top: 210, left: 465, rotation: 180 },
-	UlnaLeft: { top: 210, left: 255, rotation: 0 },
-	UlnaRight: { top: 210, left: 475, rotation: 180 },
+	// Pelvis and legs
+	Pelvis: { top: 255.99, left: 199.92, width: 109.48 },
+	FemurLeft: { top: 305.36, left: 257.17, width: 55.78 },
+	FemurRight: { top: 303.23, left: 192.89, width: 56.71 },
+	PatellaLeft: { top: 465.99, left: 265.04, width: 19.3 },
+	PatellaRight: { top: 466.03, left: 221.57, width: 19.3 },
+	TibiaLeft: { top: 473.22, left: 253.04, width: 35.91 },
+	TibiaRight: { top: 473.88, left: 216.55, width: 34.46 },
+	FibulaLeft: { top: 484.23, left: 271.23, width: 19.01 },
+	FibulaRight: { top: 485.33, left: 215.34, width: 17.21 },
 	
-	// Hands - clearly visible from arms
-	CarpalsLeft: { top: 270, left: 260, rotation: 0 },
-	CarpalsRight: { top: 270, left: 470, rotation: 0 },
-	MetacarpalsLeft: { top: 290, left: 260, rotation: 0 },
-	MetacarpalsRight: { top: 290, left: 470, rotation: 0 },
-	PhalangesLeft: { top: 315, left: 260, rotation: 0 },
-	PhalangesRight: { top: 315, left: 470, rotation: 0 },
-	
-	// Pelvis - centered below spine
-	Pelvis: { top: 275, left: 340, rotation: 0 },
-	
-	// Legs - natural hip width apart
-	FemurLeft: { top: 320, left: 340, rotation: 0 },
-	FemurRight: { top: 320, left: 390, rotation: 0 },
-	
-	// Knees - at proper leg spacing
-	PatellaLeft: { top: 405, left: 342, rotation: 0 },
-	PatellaRight: { top: 405, left: 392, rotation: 0 },
-	
-	// Lower legs - well-spaced
-	TibiaLeft: { top: 420, left: 340, rotation: 0 },
-	TibiaRight: { top: 420, left: 390, rotation: 0 },
-	FibulaLeft: { top: 420, left: 330, rotation: 0 },
-	FibulaRight: { top: 420, left: 400, rotation: 0 },
-	
-	// Feet - clearly positioned
-	TarsalsLeft: { top: 500, left: 335, rotation: 0 },
-	TarsalsRight: { top: 500, left: 395, rotation: 0 },
-	MetatarsalsLeft: { top: 525, left: 335, rotation: 0 },
-	MetatarsalsRight: { top: 525, left: 395, rotation: 0 },
-	PhalangesFootLeft: { top: 555, left: 335, rotation: 0 },
-	PhalangesFootRight: { top: 555, left: 395, rotation: 0 },
+	// Feet
+	TarsalsLeft: { top: 605.90, left: 254.23, width: 29.80 },
+	TarsalsRight: { top: 605.85, left: 219.35, width: 29.88 },
+	MetatarsalsLeft: { top: 619.20, left: 261.03, width: 34.24 },
+	MetatarsalsRight: { top: 619.37, left: 208.88, width: 34.01 },
+	PhalangesFootLeft: { top: 633.87, left: 274.77, width: 30.47 },
+	PhalangesFootRight: { top: 634.28, left: 199.52, width: 30.41 },
 };
 
 // Helper to get paired part IDs
@@ -175,85 +165,111 @@ const getPairedPartIds = (id) => {
 const TheSkeleton = () => {
 	const [hovered, setHovered] = useState(null);
 	const [selected, setSelected] = useState(null);
+	const [loadedSVGs, setLoadedSVGs] = useState({});
+	const containerRef = useRef(null);
+
+	// Load SVG content as text to access individual paths
+	useEffect(() => {
+		const loadSVGContent = async () => {
+			const svgPromises = PARTS.map(async (part) => {
+				if (!part.svg) return [part.id, null];
+				try {
+					const response = await fetch(part.svg);
+					const svgText = await response.text();
+					return [part.id, svgText];
+				} catch (error) {
+					console.error(`Failed to load SVG for ${part.id}:`, error);
+					return [part.id, null];
+				}
+			});
+
+			const results = await Promise.all(svgPromises);
+			const svgMap = Object.fromEntries(results.filter(([_, svg]) => svg !== null));
+			setLoadedSVGs(svgMap);
+		};
+
+		loadSVGContent();
+	}, []);
+
+	// Set up precise hover detection using CSS pointer-events
+	useEffect(() => {
+		if (Object.keys(loadedSVGs).length === 0) return;
+
+		const style = document.createElement('style');
+		style.textContent = `
+			/* Disable pointer events on entire SVG */
+			.skeleton-part svg {
+				pointer-events: none;
+			}
+			
+			/* Enable pointer events only on filled paths */
+			.skeleton-part svg path:not([fill="none"]):not([fill="transparent"]),
+			.skeleton-part svg g path:not([fill="none"]):not([fill="transparent"]) {
+				pointer-events: all;
+				cursor: pointer;
+			}
+		`;
+		document.head.appendChild(style);
+
+		return () => {
+			document.head.removeChild(style);
+		};
+	}, [loadedSVGs]);
 
 	// Compute highlighted parts for hover and selection
 	const hoveredParts = hovered ? getPairedPartIds(hovered) : [];
 	const selectedParts = selected ? getPairedPartIds(selected) : [];
 
+	if (Object.keys(loadedSVGs).length === 0) {
+		return (
+			<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+				<div style={{ fontSize: '1.5rem', color: '#666' }}>Loading skeleton...</div>
+			</div>
+		);
+	}
+
 	return (
 		<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-			<div style={{ position: 'relative', width: 800, height: 700, background: '#fff', border: '1px solid #eee' }}>
+			<div ref={containerRef} style={{ position: 'relative', width: 800, height: 700, background: '#fff', border: '1px solid #eee' }}>
 				{PARTS.map(part => {
+					const position = PART_POSITIONS[part.id];
+					const svgContent = loadedSVGs[part.id];
+					if (!position || !svgContent) return null;
+					
 					return (
 						<div
 							key={part.id}
+							className="skeleton-part"
+							data-part={part.id}
 							style={{
 								position: 'absolute',
-								top: PART_POSITIONS[part.id]?.top,
-								left: PART_POSITIONS[part.id]?.left,
-								cursor: 'pointer',
+								top: position.top,
+								left: position.left,
+								width: `${position.width}px`,
+								height: 'auto',
 								transition: 'all 0.3s ease',
-								zIndex: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 10 : 1,
-								transform: `rotate(${PART_POSITIONS[part.id]?.rotation || 0}deg) ${hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 'scale(1.05)' : 'scale(1)'}`,
+								zIndex: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 10 : 
+								        (part.id === 'Skull' || part.id === 'Mandible') ? 5 : 1,
+								transform: `${hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 'scale(1.05)' : 'scale(1)'}`,
 								transformOrigin: 'center center',
+								filter: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 
+									'drop-shadow(0 0 10px #1976d2) brightness(1.2)' : 
+									'none',
+								opacity: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 1 : 0.85,
 							}}
 							onMouseEnter={() => setHovered(part.id)}
 							onMouseLeave={() => setHovered(null)}
-							onClick={() => setSelected(part.id)}
+							onClick={(e) => {
+								// Only respond to clicks that come from SVG paths with pointer-events enabled
+								const target = e.target;
+								if (target.tagName === 'path' && target.style.pointerEvents !== 'none') {
+									console.log(`Clicked on ${part.id}`);
+									setSelected(part.id);
+								}
+							}}
 							title={part.label}
-						>
-							{part.svg ? (
-								<img
-									src={part.svg}
-									alt={part.label}
-									style={{
-										width: 'auto',
-										height: 'auto',
-										maxWidth: 
-											// Head
-											part.id === 'Skull' ? '75px' :
-											part.id === 'Mandible' ? '55px' :
-											// Large central structures
-											part.id === 'Ribs' ? '120px' :
-											part.id === 'Pelvis' ? '95px' :
-											part.id === 'Scapula' ? '85px' :
-											// Spine
-											part.id.includes('Vertebrae') ? '65px' :
-											part.id.includes('Sacrum') ? '50px' :
-											part.id.includes('Coccyx') ? '25px' :
-											// Long bones - legs
-											part.id.includes('Femur') ? '60px' :
-											part.id.includes('Tibia') ? '55px' :
-											part.id.includes('Fibula') ? '45px' :
-											// Long bones - arms  
-											part.id.includes('Humerus') ? '55px' :
-											part.id.includes('Radius') || part.id.includes('Ulna') ? '45px' :
-											// Connective bones
-											part.id.includes('Clavicle') ? '50px' :
-											part.id.includes('Patella') ? '20px' :
-											// Chest
-											part.id.includes('Sternum') || part.id.includes('Manubrium') ? '30px' :
-											// Hand bones
-											part.id.includes('Carpals') ? '35px' :
-											part.id.includes('Metacarpals') ? '40px' :
-											part.id.includes('Phalanges') && !part.id.includes('Foot') ? '45px' :
-											// Foot bones
-											part.id.includes('Tarsals') ? '35px' :
-											part.id.includes('Metatarsals') ? '40px' :
-											part.id.includes('PhalangesFoot') ? '40px' :
-											// Default
-											'50px',
-										filter: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 
-											'drop-shadow(0 0 10px #1976d2) brightness(1.2)' : 
-											'none',
-										opacity: hoveredParts.includes(part.id) || selectedParts.includes(part.id) ? 1 : 0.85,
-										transition: 'all 0.3s ease',
-									}}
-								/>
-							) : (
-								<span style={{ color: '#aaa', fontSize: 10 }}>No SVG</span>
-							)}
-						</div>
+							dangerouslySetInnerHTML={{ __html: svgContent }}
+						/>
 					);
 				})}
 			</div>
