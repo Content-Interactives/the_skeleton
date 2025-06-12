@@ -162,6 +162,21 @@ const getPairedPartIds = (id) => {
 	return [id];
 };
 
+// Helper to get a custom bounding box between two bones
+const getBetweenBox = (partId, options = {}) => {
+	const box = PART_POSITIONS[partId];
+	if (!box) return null;
+	// Shrink the box horizontally to the middle 40% and vertically to the middle 60%
+	const shrinkX = options.shrinkX || 0.3; // 30% from each side
+	const shrinkY = options.shrinkY || 0.2; // 20% from top and bottom
+	return {
+		left: box.left + box.width * shrinkX,
+		top: box.top + box.height * shrinkY,
+		width: box.width * (1 - 2 * shrinkX),
+		height: box.height * (1 - 2 * shrinkY)
+	};
+};
+
 const TheSkeleton = () => {
 	const [hovered, setHovered] = useState(null);
 	const [selected, setSelected] = useState(null);
@@ -169,6 +184,7 @@ const TheSkeleton = () => {
 	const [popupPosition, setPopupPosition] = useState({ top: 10, left: 10 });
 	const containerRef = useRef(null);
 	const popupRef = useRef(null);
+	const boundingBoxHoverRef = useRef(false); // Track if a bounding box is hovered
 
 	// Load SVG content as text - keep original styling intact
 	useEffect(() => {
@@ -226,8 +242,8 @@ const TheSkeleton = () => {
 
 		// Global mouse tracking to handle hover state with more forgiving detection
 		const handleGlobalMouseMove = (e) => {
+			if (boundingBoxHoverRef.current) return; // Don't clear hover if bounding box is hovered
 			const target = e.target;
-			
 			// Check if we're hovering over a clickable path (more forgiving approach)
 			if (target.tagName === 'path') {
 				// Find the part this path belongs to
@@ -238,7 +254,6 @@ const TheSkeleton = () => {
 					return;
 				}
 			}
-			
 			// Also check if we're over the bone container (as fallback)
 			const boneContainer = target.closest('.skeleton-part');
 			if (boneContainer) {
@@ -246,12 +261,10 @@ const TheSkeleton = () => {
 				setHovered(partId);
 				return;
 			}
-			
 			// If we're not over a valid target, clear hover
 			setHovered(null);
 		};
 
-		// Add global mouse move listener
 		document.addEventListener('mousemove', handleGlobalMouseMove);
 
 		return () => {
@@ -358,7 +371,139 @@ const TheSkeleton = () => {
 			<div style={{ position: 'relative', width: 500, height: 600 }}>
 				{/* Border box absolutely positioned, shifted up 50px */}
 				<div style={{ position: 'absolute', top: -50, left: 0, width: 500, height: 650, border: '2px solid #bbb', borderRadius: 12, pointerEvents: 'none', boxSizing: 'border-box' }} />
-				<div ref={containerRef} style={{ position: 'relative', width: 500, height: 600, overflow: 'visible' }}>
+				<div ref={containerRef} style={{ position: 'relative', width: 500, height: 600, overflow: 'visible' }}
+				>
+					{/* --- CUSTOM HAND BETWEEN HIT AREAS --- */}
+					{['Left', 'Right'].map(side => {
+						const metaId = `Metacarpals${side}`;
+						const phalId = `Phalanges${side}`;
+						const metaBox = side === 'Left'
+							? (() => {
+								const box = getBetweenBox(metaId, { shrinkX: 0.3, shrinkY: 0.2 });
+								if (!box) return null;
+								return {
+									...box,
+									width: box.width + 4,
+								};
+							})()
+							: (() => {
+								const box = getBetweenBox(metaId, { shrinkX: 0.3, shrinkY: 0.2 });
+								if (!box) return null;
+								return {
+									...box,
+									left: box.left - 4,
+									top: box.top - 1,
+									width: box.width + 4,
+									height: box.height - 2
+								};
+							})();
+						const phalBox = side === 'Left'
+							? (() => {
+								const box = getBetweenBox(phalId, { shrinkX: 0.3, shrinkY: 0.2 });
+								if (!box) return null;
+								const centerX = box.left + box.width / 2;
+								const centerY = box.top + box.height / 2;
+								return {
+									left: centerX - 7.5 - 8,
+									top: centerY - 7.5 + 2 + 3,
+									width: 21,
+									height: 15
+								};
+							})()
+							: (() => {
+								const box = getBetweenBox(phalId, { shrinkX: 0.3, shrinkY: 0.2 });
+								if (!box) return null;
+								return {
+									...box,
+									left: box.left - 4,
+									top: box.top + 6,
+									width: box.width - 1,
+									height: box.height - 12
+								};
+							})();
+						return (
+							<React.Fragment key={side}>
+								{metaBox && (
+									<div
+										style={{
+											position: 'absolute',
+											top: metaBox.top,
+											left: metaBox.left,
+											width: metaBox.width,
+											height: metaBox.height,
+											zIndex: 20,
+											background: 'transparent',
+											pointerEvents: 'auto',
+											cursor: 'pointer',
+										}}
+										onMouseEnter={() => { boundingBoxHoverRef.current = true; setHovered(metaId); }}
+										onMouseLeave={() => { boundingBoxHoverRef.current = false; setHovered(null); }}
+										onClick={e => {
+											setSelected(metaId);
+											const containerRect = containerRef.current.getBoundingClientRect();
+											const newMarker = {
+												x: e.clientX - containerRect.left,
+												y: e.clientY - containerRect.top
+											};
+											setTimeout(() => {
+												const newPosition = calculatePopupPosition(e.clientX, e.clientY, metaId);
+												setPopupPosition(newPosition);
+											}, 0);
+										}}
+									/>
+								)}
+								{phalBox && (
+									<div
+										style={{
+											position: 'absolute',
+											top: phalBox.top,
+											left: phalBox.left,
+											width: phalBox.width,
+											height: phalBox.height,
+											zIndex: 20,
+											background: 'transparent',
+											pointerEvents: 'auto',
+											cursor: 'pointer',
+										}}
+										onMouseEnter={() => { boundingBoxHoverRef.current = true; setHovered(phalId); }}
+										onMouseLeave={() => { boundingBoxHoverRef.current = false; setHovered(null); }}
+										onClick={e => {
+											setSelected(phalId);
+											const containerRect = containerRef.current.getBoundingClientRect();
+											const newMarker = {
+												x: e.clientX - containerRect.left,
+												y: e.clientY - containerRect.top
+											};
+											setTimeout(() => {
+												const newPosition = calculatePopupPosition(e.clientX, e.clientY, phalId);
+												setPopupPosition(newPosition);
+											}, 0);
+										}}
+									/>
+								)}
+							</React.Fragment>
+						);
+					})}
+					{/* Pixel marker and distance for click positions */}
+					{/* clickMarkers.length === 2 && (
+						<div
+							style={{
+								position: 'absolute',
+								top: clickMarkers[0].y - 25,
+								left: clickMarkers[0].x + 10,
+								background: 'rgba(0,0,0,0.7)',
+								color: 'white',
+								padding: '2px 8px',
+								borderRadius: '8px',
+								fontSize: '14px',
+								zIndex: 1002,
+								pointerEvents: 'none',
+							}}
+						>
+							{getDistance(clickMarkers[0], clickMarkers[1])} px
+						</div>
+					)} */}
+					{/* --- END CUSTOM HAND BETWEEN HIT AREAS --- */}
 					{PARTS.map(part => {
 						const position = PART_POSITIONS[part.id];
 						const svgContent = loadedSVGs[part.id];
