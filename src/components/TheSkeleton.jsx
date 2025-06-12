@@ -383,7 +383,9 @@ const TheSkeleton = () => {
 								if (!box) return null;
 								return {
 									...box,
+									left: box.left - 5,
 									width: box.width + 4,
+									height: box.height - 2
 								};
 							})()
 							: (() => {
@@ -421,6 +423,28 @@ const TheSkeleton = () => {
 									height: box.height - 12
 								};
 							})();
+
+						// Small tip box for each phalanges
+						const phalTipBox = (() => {
+							const box = getBetweenBox(phalId, { shrinkX: 0.3, shrinkY: 0.2 });
+							if (!box) return null;
+							if (side === 'Left') {
+								return {
+									left: box.left + box.width / 2 - 5 - 1 + 1,
+									top: box.top + box.height - 10 + 2 - 1,
+									width: 10,
+									height: 10
+								};
+							} else {
+								return {
+									left: box.left + box.width / 2 - 5 - 3,
+									top: box.top + box.height - 10 + 1 - 1,
+									width: 10,
+									height: 10
+								};
+							}
+						})();
+
 						return (
 							<React.Fragment key={side}>
 								{metaBox && (
@@ -478,6 +502,29 @@ const TheSkeleton = () => {
 												const newPosition = calculatePopupPosition(e.clientX, e.clientY, phalId);
 												setPopupPosition(newPosition);
 											}, 0);
+										}}
+									/>
+								)}
+								{phalTipBox && (
+									<div
+										style={{
+											position: 'absolute',
+											top: phalTipBox.top,
+											left: phalTipBox.left,
+											width: phalTipBox.width,
+											height: phalTipBox.height,
+											zIndex: 20,
+											background: 'transparent',
+											pointerEvents: 'auto',
+											cursor: 'pointer',
+										}}
+										onMouseEnter={() => { boundingBoxHoverRef.current = true; setHovered(phalId); }}
+										onMouseLeave={() => { boundingBoxHoverRef.current = false; setHovered(null); }}
+										onClick={e => {
+											setSelected(phalId);
+											const containerRect = containerRef.current.getBoundingClientRect();
+											const newPosition = calculatePopupPosition(e.clientX, e.clientY, phalId);
+											setPopupPosition(newPosition);
 										}}
 									/>
 								)}
