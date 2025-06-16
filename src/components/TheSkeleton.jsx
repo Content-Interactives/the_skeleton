@@ -352,27 +352,59 @@ const TheSkeleton = () => {
 	if (Object.keys(loadedSVGs).length === 0) {
 		return (
 			<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-				<div style={{ fontSize: '1.5rem', color: '#666' }}>Loading skeleton...</div>
+				<div style={{ fontSize: '1.6rem', color: '#666' }}>Loading skeleton...</div>
 			</div>
 		);
 	}
 
 	return (
-		<div style={{ 
-			height: '100vh', 
-			display: 'flex', 
-			alignItems: 'center', 
-			justifyContent: 'center', 
-			flexDirection: 'column', 
-			fontFamily: 'Arial, sans-serif', 
-			padding: '20px', 
-			overflow: 'hidden'
+		<div style={{
+			background: '#fff',
+			borderRadius: '16px',
+			boxShadow: '0 2px 12px 0 rgba(60,60,60,0.08)',
+			border: '1px solid #e0e0e0',
+			padding: 0,
+			margin: '19px',
+			maxWidth: 500,
+			width: '100%',
+			minHeight: 635,
+			position: 'relative',
+			display: 'flex',
+			flexDirection: 'column',
+			fontFamily: 'Proxima Nova, Arial, sans-serif',
+			left: 370,
+			paddingBottom: 15,
 		}}>
-			<div style={{ position: 'relative', width: 500, height: 600 }}>
-				{/* Border box absolutely positioned, shifted up 50px */}
-				<div style={{ position: 'absolute', top: -50, left: 0, width: 500, height: 650, border: '2px solid #bbb', borderRadius: 12, pointerEvents: 'none', boxSizing: 'border-box' }} />
-				<div ref={containerRef} style={{ position: 'relative', width: 500, height: 600, overflow: 'visible' }}
-				>
+			{/* Title in top left */}
+			<div style={{
+				position: 'absolute',
+				top: 20,
+				left: 24,
+				fontWeight: 700,
+				fontSize: '1.15rem',
+				color: '#5C4DFF',
+				letterSpacing: 0.1,
+				zIndex: 2
+			}}>
+				The Skeleton
+			</div>
+			{/* Inner skeleton box */}
+			<div style={{
+				margin: '55px auto 0 auto',
+				background: '#fff',
+				borderRadius: '12px',
+				border: '1px solid #e0e0e0',
+				boxShadow: '0 1px 6px 0 rgba(60,60,60,0.04)',
+				padding: '12px',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				flexDirection: 'column',
+				width: 440,
+				minHeight: 650,
+				position: 'relative',
+			}}>
+				<div style={{ position: 'relative', width: 400, height: 610, top: 30, left: -50 }}>
 					{/* --- CUSTOM HAND BETWEEN HIT AREAS --- */}
 					{['Left', 'Right'].map(side => {
 						const metaId = `Metacarpals${side}`;
@@ -625,8 +657,8 @@ const TheSkeleton = () => {
 					>
 						<h3 style={{ 
 							margin: '0 0 8px 0', 
-							color: '#1976d2',
-							fontSize: '1.1em'
+							color: '#008545',
+							fontSize: '1.2em'
 						}}>
 							{PARTS.find(p => p.id === selected)?.label}
 						</h3>
@@ -634,7 +666,7 @@ const TheSkeleton = () => {
 							margin: 0, 
 							lineHeight: 1.4, 
 							color: '#333',
-							fontSize: '0.95em'
+							fontSize: '1.05em'
 						}}>
 							{PARTS.find(p => p.id === selected)?.description}
 						</p>
