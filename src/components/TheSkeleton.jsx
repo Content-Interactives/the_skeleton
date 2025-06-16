@@ -657,7 +657,7 @@ const TheSkeleton = () => {
 					>
 						<h3 style={{ 
 							margin: '0 0 8px 0', 
-							color: '#008545',
+							color: '#4E48CC',
 							fontSize: '1.2em'
 						}}>
 							{PARTS.find(p => p.id === selected)?.label}
