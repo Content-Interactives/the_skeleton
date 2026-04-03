@@ -1,40 +1,37 @@
 # The Skeleton
 
-The **Skeleton** interactive provides a 3D visualization of the human skeletal system, allowing students to explore major bones and their structure.
+React SPA rendering an interactive 3D human skeleton (bone labels / exploration).
 
----
+**Live:** [https://content-interactives.github.io/the_skeleton](https://content-interactives.github.io/the_skeleton)
 
-## 🔗 Live Interactive
+Curriculum alignment: [Standards.md](Standards.md).
 
-Try it out here:  
-👉 [https://content-interactives.github.io/the_skeleton](https://content-interactives.github.io/the_skeleton)
+## Stack
 
----
+- React 19, Vite
+- Tailwind CSS, PostCSS
+- Framer Motion, Lucide React
+- GitHub Pages (`gh-pages`)
 
-## 🌐 Where This Interactive Is Being Used
+## Setup
 
-This interactive is currently featured in the following locations:
+```bash
+npm install
+npm run dev
+```
 
-- <img width="20" height="20" alt="image" src="https://github.com/user-attachments/assets/5d12571f-8e12-4441-98ab-c0bc94069a96" /> **CK-12 Intent Response**  
-  - 👉 PRODUCTION: PENDING  
-  - 👉 MASTER: PENDING  
-- 📘 **CK-12 Flexbooks**
-  - 👉 PENDING
+## Scripts
 
----
+| Command | Description |
+|--------|-------------|
+| `npm run dev` | Dev server |
+| `npm run build` | Production build |
+| `npm run preview` | Preview `dist/` |
+| `npm run lint` | ESLint |
+| `npm run deploy` | Build + `gh-pages` |
 
-## 📚 Standards & Subjects
+## Configuration
 
-This interactive aligns with the following topics and standards:
+`vite.config.js`: `base: '/the_skeleton/'`.
 
-- **📂 Subject Area**: High School Science (Biology)  
-- **🦴 Topic**: Skeletal System  
-- **📏 NGSS**:  
-  - HS-LS1-2 – Develop and use a model to illustrate the hierarchical organization of interacting systems that provide specific functions within multicellular organisms.
-
----
-
-## 🛠️ Developer Notes
-
-- Built with: React, HTML, CSS, JavaScript  
-- Deployed via GitHub Pages
+Source: `src/`.
